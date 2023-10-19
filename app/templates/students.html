@@ -14,15 +14,16 @@
         </tr>
     </thead>
     <tbody>
+        {% for student in student_data %}
         <tr>
-            <td>2021-0728</td>
-            <td>Carl Christian</td>
-            <td>Tilid</td>
-            <td>BSCS</td>
-            <td>3</td>
-            <td>Male</td>
+            <td>{{ student.id }}</td>
+            <td>{{ student.firstname }}</td>
+            <td>{{ student.lastname }}</td>
+            <td>{{ student.coursecode }}</td>
+            <td>{{ student.studentyear }}</td>
+            <td>{{ student.gender }}</td>
         </tr>
-        <!-- Add more rows -->
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

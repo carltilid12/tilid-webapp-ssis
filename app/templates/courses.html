@@ -11,12 +11,13 @@
         </tr>
     </thead>
     <tbody>
+        {% for course in course_data %}
         <tr>
-            <td>BSCS</td>
-            <td>BS Computer Science</td>
-            <td>CCS</td>
+            <td>{{ course.coursecode }}</td>
+            <td>{{ course.coursename }}</td>
+            <td>{{ course.collegecode }}</td>
         </tr>
-        <!-- Add more rows -->
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

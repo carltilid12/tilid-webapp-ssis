@@ -10,11 +10,12 @@
         </tr>
     </thead>
     <tbody>
+        {% for college in college_data %}
         <tr>
-            <td>CCS</td>
-            <td>College of Computer Studies</td>
+            <td>{{ college.collegecode }}</td>
+            <td>{{ college.collegename }}</td>
         </tr>
-        <!-- Add more rows -->
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

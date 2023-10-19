@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from app import mysql
 
 views = Blueprint('views', __name__)
 
@@ -8,12 +9,33 @@ def home():
 
 @views.route('/students')
 def students():
-    return render_template("students.html")
+    connection = mysql.connection
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM student')
+    data = cursor.fetchall()
+    cursor.close()
+
+    # Pass the retrieved data to the 'students.html' template
+    return render_template("students.html", student_data=data)
 
 @views.route('/courses')
 def courses():
-    return render_template("courses.html")
+    connection = mysql.connection
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM course')
+    data = cursor.fetchall()
+    cursor.close()
+
+    # Pass the retrieved data to the 'courses.html' template
+    return render_template("courses.html", course_data=data)
 
 @views.route('/colleges')
 def colleges():
-    return render_template("colleges.html")
+    connection = mysql.connection
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM college')
+    data = cursor.fetchall()
+    cursor.close()
+
+    # Pass the retrieved data to the 'courses.html' template
+    return render_template("colleges.html", college_data=data)
