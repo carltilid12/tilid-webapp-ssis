@@ -1,6 +1,81 @@
 {% extends "base.html" %}
 {% block title %}Students{% endblock %}
 {% block page %}Students{% endblock %}
+{% block create %}
+<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createStudentModal">
+    Create
+</button>
+
+<!-- Create Student Modal -->
+<div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createStudentModalLabel">Create Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('student_bp.students') }}">
+                    <!-- Other form fields for student information -->
+                    <div class="mb-3">
+                        <label for="id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="id" name="id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="course" class="form-label">Course</label>
+                        <select class="form-select" id="course" name="course" required>
+                            <option value="" selected disabled>Select Course</option>
+                            {% for course in course_data %}
+                                <option value="{{ course.coursecode }}">{{ course.coursename }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <select class="form-select" id="year" name="year" required>
+                            <option value="" selected disabled>Select Year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- Display the success message if there is no error -->
+{% if error is none %}
+    <div class="alert alert-success">
+        Student created successfully
+    </div>
+{% endif %}
+
+<!-- Display the error message if there is an error -->
+{% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+{% endif %}
 {% block content %}
 <table class="table table-striped table-bordered mt-3">
     <thead class="table-dark">
