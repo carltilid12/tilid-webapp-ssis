@@ -24,6 +24,12 @@ def create_app():
     CSRFProtect(app)
 
     from .views import views
+    from .routes.student_route import student_bp
+    from .routes.course_route import course_bp
+    from .routes.college_route import college_bp
 
     app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(student_bp, url_prefix='/')
+    app.register_blueprint(course_bp, url_prefix='/')
+    app.register_blueprint(college_bp, url_prefix='/')
     return app
