@@ -1,21 +1,80 @@
 {% extends "base.html" %}
 {% block title %}Colleges{% endblock %}
 {% block page %}Colleges{% endblock %}
+{% block create %}
+<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createCollegeModal">
+    Create College
+</button>
+
+<!-- Create College Modal -->
+<div class="modal fade" id="createCollegeModal" tabindex="-1" aria-labelledby="createCollegeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCollegeModalLabel">Create College</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('college_bp.colleges') }}">
+                    <!-- Form fields for college information -->
+                    <div class="mb-3">
+                        <label for="collegecode" class="form-label">Code</label>
+                        <input type="text" class="form-control" id="collegecode" name="collegecode" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="collegename" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="collegename" name="collegename" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
-<table class="table table-striped table-bordered mt-3">
+<table class="table table-striped table-borderless mt-3">
     <thead class="table-dark">
         <tr>
-            <th>Code</th>
-            <th>Name</th>
+            <th style="width: 150px;">College Code</th>
+            <th style="width: 300px;">College Name</th>
+            <th style="width: 130px;"></th>
         </tr>
     </thead>
     <tbody>
         {% for college in college_data %}
-        <tr>
+        <tr class="highlightable-row" data-id="{{ college.collegecode }}" style="height: 48px;">
             <td>{{ college.collegecode }}</td>
             <td>{{ college.collegename }}</td>
+            <td style="text-align: right;">
+                <button class="btn btn-primary btn-sm edit-btn" style="display: none">Edit</button>
+                <button class="btn btn-danger btn-sm delete-btn" style="display: none">Delete</button>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<script>
+    $(document).ready(function () {
+        // Add click event listener to highlight rows
+        $(".highlightable-row").click(function () {
+            $(".highlightable-row").removeClass("table-active");
+            // Toggle the 'table-active' class on the clicked row
+            $(this).toggleClass("table-active");
+            // Hide all edit and delete buttons
+            $(".edit-btn, .delete-btn").hide();
+
+            // Show edit and delete buttons for the clicked row
+            $(this).find(".edit-btn, .delete-btn").show();
+        });
+        $(document).on("click", function (e) {
+            if (!$(e.target).closest(".highlightable-row").length) {
+                // Click occurred outside of the table rows
+                $(".highlightable-row").removeClass("table-active");
+                $(".edit-btn, .delete-btn").hide();
+            }
+        });
+    });
+</script>
 {% endblock %}
