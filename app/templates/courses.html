@@ -88,7 +88,7 @@
             <td>{{ course.collegecode }}</td>
             <td style="text-align: right;">
                 <button class="btn btn-primary btn-sm edit-btn" onclick="editCourse(this)" style="display: none; ">Edit</button>
-                <button class="btn btn-danger btn-sm delete-btn" style="display: none">Delete</button>
+                <button class="btn btn-danger btn-sm delete-btn" data-id="{{ course.coursecode }}" style="display: none" onclick="confirmDelete('{{ course.coursecode }}')">Delete</button>
             </td>
         </tr>
         {% endfor %}
@@ -132,5 +132,23 @@
     // Show the modal
     $('#editCourseModal').modal('show');
     }
+    function confirmDelete(coursecode) {
+    if (confirm("Are you sure you want to delete this course?")) {
+        // User confirmed, perform the delete operation
+        $.ajax({
+            type: "DELETE",
+            url: `/delete_course/${coursecode}`,  // Update the URL for deleting courses
+            success: function (data) {
+                // Handle success, update the UI
+                // Remove the deleted course's row from the table
+                $(`.highlightable-row[data-coursecode="${coursecode}"]`).remove();
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Failed to delete course', error);
+            }
+        });
+    }
+}
 </script>
 {% endblock %}

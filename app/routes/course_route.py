@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for
+from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify
 from app.models.course_models import course_model
 from app.models.college_models import college_model
 
@@ -55,3 +55,15 @@ def update_course():
 
         # After updating, you can redirect to the courses page or perform any other necessary actions
         return redirect(url_for('course_bp.courses'))
+    
+@course_bp.route('/delete_course/<string:coursecode>', methods=['DELETE'])
+def delete_course(coursecode):
+    try:
+        # Call the delete_course function from course_models.py
+        success = course_model.delete_course(coursecode)
+        if success:
+            return jsonify({'message': 'Course deleted successfully'})
+        else:
+            return jsonify({'error': 'Failed to delete course'})
+    except Exception as e:
+        return jsonify({'error': 'Failed to delete course'})
