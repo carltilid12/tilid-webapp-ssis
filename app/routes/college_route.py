@@ -30,3 +30,26 @@ def colleges():
 
     # Pass the retrieved data to the 'college.html' template
     return render_template("colleges.html", college_data=colleges)
+
+@college_bp.route('/update_college', methods=['GET', 'POST'])
+def update_college():
+    if request.method == 'POST':
+        # Get the updated college data from the form
+        college_data = {
+            'collegecode': request.form.get('edit-collegecode'),
+            'collegename': request.form.get('edit-collegename')
+        }
+
+        try:
+            # Call the update_college function to update the college in the database
+            college_model.update_college(college_data)
+            print('College updated successfully', 'success')
+        except Exception as e:
+            print('Failed to update the college', 'error')
+
+        # After updating, you can redirect to the colleges page or perform any other necessary actions
+        return redirect(url_for('college_bp.colleges'))
+
+
+
+

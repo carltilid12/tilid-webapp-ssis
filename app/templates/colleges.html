@@ -34,6 +34,30 @@
 {% endblock %}
 
 {% block content %}
+<!-- Edit College Modal -->
+<div class="modal fade" id="editCollegeModal" tabindex="-1" aria-labelledby="editCollegeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCollegeModalLabel">Edit College</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-college-form" method="POST" action="{{ url_for('college_bp.update_college') }}">
+                    <div class="mb-3">
+                        <label for="edit-collegecode" class="form-label">College Code</label>
+                        <input type="text" class="form-control" id="edit-collegecode" name="edit-collegecode" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-collegename" class="form-label">College Name</label>
+                        <input type="text" class="form-control" id="edit-collegename" name="edit-collegename" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <table class="table table-striped table-borderless mt-3">
     <thead class="table-dark">
         <tr>
@@ -44,11 +68,11 @@
     </thead>
     <tbody>
         {% for college in college_data %}
-        <tr class="highlightable-row" data-id="{{ college.collegecode }}" style="height: 48px;">
+        <tr class="highlightable-row" data-collegecode="{{ college.collegecode }}" style="height: 48px;">
             <td>{{ college.collegecode }}</td>
             <td>{{ college.collegename }}</td>
             <td style="text-align: right;">
-                <button class="btn btn-primary btn-sm edit-btn" style="display: none">Edit</button>
+                <button class="btn btn-primary btn-sm edit-btn" onclick="editCollege(this)" style="display: none; ">Edit</button>
                 <button class="btn btn-danger btn-sm delete-btn" style="display: none">Delete</button>
             </td>
         </tr>
@@ -76,5 +100,20 @@
             }
         });
     });
+    function editCollege(button) {
+        // Get the closest row to the clicked "Edit" button
+        var row = $(button).closest('tr');
+        
+        // Retrieve the values from the row cells
+        var collegecode = row.find('td:eq(0)').text();
+        var collegename = row.find('td:eq(1)').text();
+        
+        // Populate the modal form fields with the retrieved values
+        $('#editCollegeModal #edit-collegecode').val(collegecode);
+        $('#editCollegeModal #edit-collegename').val(collegename);
+    
+        // Show the modal
+        $('#editCollegeModal').modal('show');
+    }
 </script>
 {% endblock %}
