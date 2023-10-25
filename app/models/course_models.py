@@ -2,6 +2,28 @@ from app import mysql
 
 class course_model:
     @classmethod
+    def update_course(cls, course_data):
+        connection = mysql.connection
+        cursor = connection.cursor()
+        try:
+            # Define the SQL query to update an existing course
+            update_query = "UPDATE course SET coursename = %s, collegecode = %s WHERE coursecode = %s"
+            print(update_query)
+            print(course_data)
+            # Execute the query with the course data
+            cursor.execute(update_query, (course_data['coursename'], course_data['collegecode'], course_data['coursecode']))
+            
+            # Commit the transaction to save the changes to the database
+            connection.commit()
+
+        except Exception as e:
+            # Handle any errors that may occur during the update
+            connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+
+    @classmethod
     def create_course(cls, course_data):
         connection = mysql.connection
         cursor = connection.cursor()
