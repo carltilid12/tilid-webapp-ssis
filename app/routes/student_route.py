@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app.models.student_models import student_model
 from app.models.course_models import course_model
 
@@ -63,3 +63,15 @@ def update_student():
 
         # After updating, you can redirect to the students page or perform any other necessary actions
         return redirect(url_for('student_bp.students'))
+    
+@student_bp.route('/delete_student/<string:recordId>', methods=['DELETE'])
+def delete_student(recordId):
+    try:
+        # Call the delete_student function from student_models.py
+        success = student_model.delete_student(recordId)
+        if success:
+            return jsonify({'message': 'Student deleted successfully'})
+        else:
+            return jsonify({'error': 'Failed to delete student'})
+    except Exception as e:
+        return jsonify({'error': 'Failed to delete student'})

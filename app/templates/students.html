@@ -139,12 +139,12 @@
     <thead class="table-dark">
         <tr>
             <th style="width: 150px;">ID</th>
-            <th style="width: 300px;">First Name</th>
+            <th style="width: 225px;">First Name</th>
             <th style="width: 150px;">Last Name</th>
             <th style="width: 100px;">Course</th>
-            <th style="width: 75px;">Year</th>
-            <th style="width: 100px;">Gender</th>
-            <th style="width: 130px;"></th>
+            <th style="width: 50px;">Year</th>
+            <th style="width: 75px;">Gender</th>
+            <th style="width: 100px;"></th>
         </tr>
     </thead>
     <tbody>
@@ -158,7 +158,7 @@
             <td>{{ student.gender }}</td>
             <td style="text-align: right;">
                 <button class="btn btn-primary btn-sm edit-btn" onclick="editStudent(this)" style="display: none; ">Edit</button>
-                <button class="btn btn-danger btn-sm delete-btn" style="display: none">Delete</button>
+                <button class="btn btn-danger btn-sm delete-btn" data-id="{{ student.id }}" style="display: none">Delete</button>
             </td>
         </tr>
         {% endfor %}
@@ -183,6 +183,23 @@
                 $(".highlightable-row").removeClass("table-active");
                 $(".edit-btn, .delete-btn").hide();
             }
+        });
+        $(".delete-btn").click(function () {
+            const studentId = $(this).data("id");
+
+            $.ajax({
+                type: "DELETE",
+                url: `/delete_student/${studentId}`,
+                success: function (data) {
+                    // Handle success, update the UI
+                    // Remove the deleted student's row from the table
+                    $(`.highlightable-row[data-id="${studentId}"]`).remove();
+                },
+                error: function (error) {
+                    // Handle errors
+                    console.error('Failed to delete student', error);
+                }
+            });
         });
     });
     function editStudent(button) {
