@@ -40,3 +40,26 @@ def students():
 
     # Pass the retrieved data to the 'students.html' template
     return render_template("students.html", student_data=students, course_data=courses, error=error)
+
+@student_bp.route('/update_student', methods=['GET', 'POST'])
+def update_student():
+    if request.method == 'POST':
+        # Get the updated student data from the form
+        student_data = {
+            'id': request.form.get('edit-id'),
+            'firstname': request.form.get('edit-firstname'),
+            'lastname': request.form.get('edit-lastname'),
+            'coursecode': request.form.get('edit-course'),
+            'studentyear': request.form.get('edit-year'),
+            'gender': request.form.get('edit-gender')
+        }
+
+        try:
+            # Call the update_student function to update the student in the database
+            student_model.update_student(student_data)
+            print('Student updated successfully', 'success')
+        except Exception as e:
+            print('Failed to update the student', 'error')
+
+        # After updating, you can redirect to the students page or perform any other necessary actions
+        return redirect(url_for('student_bp.students'))

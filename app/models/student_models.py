@@ -2,6 +2,28 @@ from app import mysql
 
 class student_model:
     @classmethod
+    def update_student(cls, student_data):
+        connection = mysql.connection
+        cursor = connection.cursor()
+        try:
+            # Define the SQL query to update an existing student
+            update_query = "UPDATE student SET firstname = %s, lastname = %s, coursecode = %s, studentyear = %s, gender = %s WHERE id = %s"
+            print(update_query)
+            print(student_data)
+            # Execute the query with the student data
+            cursor.execute(update_query, (student_data['firstname'], student_data['lastname'], student_data['coursecode'], student_data['studentyear'], student_data['gender'], student_data['id']))
+            
+            # Commit the transaction to save the changes to the database
+            connection.commit()
+
+        except Exception as e:
+            # Handle any errors that may occur during the update
+            connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+            
+    @classmethod
     def create_student(cls, student_data):
         connection = mysql.connection
         cursor = connection.cursor()

@@ -2,3 +2,6 @@
     background-color: #FFFF99; /* Choose your desired highlight color */
     /* Add any other styles for highlighting here */
 }
+form.edit-form {
+    display: none;
+}

@@ -78,6 +78,60 @@
     </div>
 {% endif %}
 {% block content %}
+<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-student-form" method="POST" action="{{ url_for('student_bp.update_student') }}">
+                    <div class="mb-3">
+                        <label for="edit-id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="edit-id" name="edit-id" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-firstname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="edit-firstname" name="edit-firstname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-lastname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="edit-lastname" name="edit-lastname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-course" class="form-label">Course</label>
+                        <select class="form-select" id="edit-course" name="edit-course" required>
+                            <option value="" selected disabled>Select Course</option>
+                            {% for course in course_data %}
+                                <option value="{{ course.coursecode }}">{{ course.coursename }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-year" class="form-label">Year</label>
+                        <select class="form-select" id="edit-year" name="edit-year" required>
+                            <option value="" selected disabled>Select Year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-gender" class="form-label">Gender</label>
+                        <select class="form-select" id="edit-gender" name="edit-gender" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <table class="table table-striped table-borderless mt-3">
     <thead class="table-dark">
         <tr>
@@ -100,7 +154,7 @@
             <td>{{ student.studentyear }}</td>
             <td>{{ student.gender }}</td>
             <td style="text-align: right;">
-                <button class="btn btn-primary btn-sm edit-btn" style="display: none">Edit</button>
+                <button class="btn btn-primary btn-sm edit-btn" onclick="editStudent(this)" style="display: none; ">Edit</button>
                 <button class="btn btn-danger btn-sm delete-btn" style="display: none">Delete</button>
             </td>
         </tr>
@@ -128,5 +182,28 @@
             }
         });
     });
+    function editStudent(button) {
+    // Get the closest row to the clicked "Edit" button
+    var row = $(button).closest('tr');
+    
+    // Retrieve the values from the row cells
+    var id = row.find('td:eq(0)').text(); // Assuming the ID is in the first cell
+    var firstname = row.find('td:eq(1)').text();
+    var lastname = row.find('td:eq(2)').text();
+    var course = row.find('td:eq(3)').text();
+    var year = row.find('td:eq(4)').text();
+    var gender = row.find('td:eq(5)').text();
+    
+    // Populate the modal form fields with the retrieved values
+    $('#editStudentModal #edit-id').val(id);
+    $('#editStudentModal #edit-firstname').val(firstname);
+    $('#editStudentModal #edit-lastname').val(lastname);
+    $('#editStudentModal #edit-course').val(course);
+    $('#editStudentModal #edit-year').val(year);
+    $('#editStudentModal #edit-gender').val(gender);
+
+    // Show the modal
+    $('#editStudentModal').modal('show');
+    }
 </script>
 {% endblock %}
