@@ -28,9 +28,9 @@ def students():
         try:
             student_model.create_student(student_data)
             error = None
-            print('Student created successfully', 'success')
+            flash('Student created successfully', 'success')
         except Exception as e:
-            print('Failed to create the student', 'error')
+            flash('Failed to create the student', 'error')
             error = 'Failed to create the student'
             
         return redirect(url_for('student_bp.students'))
@@ -57,9 +57,9 @@ def update_student():
         try:
             # Call the update_student function to update the student in the database
             student_model.update_student(student_data)
-            print('Student updated successfully', 'success')
+            flash('Student updated successfully', 'success')
         except Exception as e:
-            print('Failed to update the student', 'error')
+            flash('Failed to update the student', 'error')
 
         # After updating, you can redirect to the students page or perform any other necessary actions
         return redirect(url_for('student_bp.students'))

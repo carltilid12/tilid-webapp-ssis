@@ -43,6 +43,15 @@
 {% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-primary mt-3" role="alert">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}  
 <!-- Edit Course Modal -->
 <div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
     <div class="modal-dialog">

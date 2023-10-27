@@ -23,9 +23,9 @@ def courses():
         try:
             course_model.create_course(course_data)
             error = None
-            print('Course created successfully', 'success')
+            flash('Course created successfully', 'success')
         except Exception as e:
-            print('Failed to create the course', 'error')
+            flash('Failed to create the course', 'error')
             error = 'Failed to create the course'
 
         return redirect(url_for('course_bp.courses'))
@@ -49,9 +49,9 @@ def update_course():
         try:
             # Call the update_course function to update the course in the database
             course_model.update_course(course_data)
-            print('Course updated successfully', 'success')
+            flash('Course updated successfully', 'success')
         except Exception as e:
-            print('Failed to update the course', 'error')
+            flash('Failed to update the course', 'error')
 
         # After updating, you can redirect to the courses page or perform any other necessary actions
         return redirect(url_for('course_bp.courses'))

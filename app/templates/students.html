@@ -65,20 +65,17 @@
     </div>
 </div>
 {% endblock %}
-<!-- Display the success message if there is no error -->
-{% if error is none %}
-    <div class="alert alert-success">
-        Student created successfully
-    </div>
-{% endif %}
-
-<!-- Display the error message if there is an error -->
-{% if error %}
-    <div class="alert alert-danger">
-        {{ error }}
-    </div>
-{% endif %}
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-primary mt-3" role="alert">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}  
+  
 <!-- Edit Student Modal -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog">

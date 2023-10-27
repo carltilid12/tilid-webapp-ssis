@@ -19,9 +19,9 @@ def colleges():
         try:
             college_model.create_college(college_data)
             error = None
-            print('College created successfully', 'success')
+            flash('College created successfully', 'success')
         except Exception as e:
-            print('Failed to create the college', 'error')
+            flash('Failed to create the college', 'error')
             error = 'Failed to create the college'
 
         return redirect(url_for('college_bp.colleges'))
@@ -43,9 +43,9 @@ def update_college():
         try:
             # Call the update_college function to update the college in the database
             college_model.update_college(college_data)
-            print('College updated successfully', 'success')
+            flash('College updated successfully', 'success')
         except Exception as e:
-            print('Failed to update the college', 'error')
+            flash('Failed to update the college', 'error')
 
         # After updating, you can redirect to the colleges page or perform any other necessary actions
         return redirect(url_for('college_bp.colleges'))
