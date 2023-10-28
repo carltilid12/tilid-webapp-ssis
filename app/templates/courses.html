@@ -151,10 +151,12 @@
                 // Handle success, update the UI
                 // Remove the deleted course's row from the table
                 $(`.highlightable-row[data-coursecode="${coursecode}"]`).remove();
+                alert("Course deleted successfully");
             },
             error: function (error) {
                 // Handle errors
                 console.error('Failed to delete course', error);
+                alert("Failed to delete course");
             }
         });
     }

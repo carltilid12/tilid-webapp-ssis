@@ -215,9 +215,11 @@
                     // Handle success, update the UI
                     // Remove the deleted student's row from the table
                     $(`.highlightable-row[data-id="${recordId}"]`).remove();
+                    alert("Student deleted successfully");
                 },
                 error: function (error) {
                     // Handle errors
+                    alert("Failed to delete student");
                     console.error('Failed to delete student', error);
                 }
             });

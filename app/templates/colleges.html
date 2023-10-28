@@ -134,10 +134,12 @@
                 // Handle success, update the UI
                 // Remove the deleted college's row from the table
                 $(`.highlightable-row[data-collegecode="${collegecode}"]`).remove();
+                alert("College deleted successfully");
             },
             error: function (error) {
                 // Handle errors
                 console.error('Failed to delete college', error);
+                alert("Failed to delete college");
             }
         });
     }
