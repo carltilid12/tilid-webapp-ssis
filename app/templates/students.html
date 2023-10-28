@@ -66,14 +66,17 @@
 </div>
 {% endblock %}
 {% block content %}
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="alert alert-primary mt-3" role="alert">
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
-    </div>
-  {% endif %}
+
+<!-- Display Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{% if 'success' in category %}success{% else %}danger{% endif %} alert-dismissible fade show m-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
 {% endwith %}  
   
 <!-- Edit Student Modal -->
