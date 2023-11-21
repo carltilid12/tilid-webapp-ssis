@@ -1,7 +1,26 @@
-.highlighted {
-    background-color: #FFFF99; /* Choose your desired highlight color */
-    /* Add any other styles for highlighting here */
+table {
+    table-layout: fixed;
+    width: 100%;
 }
-form.edit-form {
-    display: none;
+th {
+    white-space: nowrap; /* Prevent text wrapping in header cells */
+    overflow: hidden; /* Hide overflow content */
+    text-overflow: ellipsis; /* Display ellipsis for overflow text */
+}
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa; /* Set a background color for the sticky header */
+    z-index: 1; /* Ensure the sticky header is above the scrolling content */
+}
+
+.details-page {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.details-page.active {
+    opacity: 1;
+    max-height: 1000px; /* Adjust based on your content height */
 }
