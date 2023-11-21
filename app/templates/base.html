@@ -78,36 +78,6 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"
         ></script> 
-        <script>
-            // Use JavaScript or jQuery to hide the CSRF token field
-            $(document).ready(function() {
-                // Hide the CSRF token field
-                $("input[name='csrf_token']").hide();
-            });
-            $(document).ready(function() {
-                // Listen for changes in the search input field
-                $("#search-input").on("input", function() {
-                    var searchText = $(this).val().toLowerCase();
-
-                    // Loop through table rows and hide those that don't match the search text
-                    $(".highlightable-row").each(function() {
-                        // Get all td elements except the last one
-                        var tdsToSearch = $(this).find('td:not(:last-child)');
-                        
-                        // Concatenate the text content of each td
-                        var rowText = tdsToSearch.map(function() {
-                            return $(this).text().toLowerCase();
-                        }).get().join(' ');
-
-                        // Check if the rowText contains the search text
-                        if (rowText.indexOf(searchText) === -1) {
-                            $(this).hide();
-                        } else {
-                            $(this).show();
-                        }
-                    });
-                });
-            });
-          </script>
+        <script src="/static/js/index.js"></script>
     </body>
 </html>

@@ -93,26 +93,6 @@
     </tbody>
 </table>
 <script>
-    $(document).ready(function () {
-        // Add click event listener to highlight rows
-        $(".highlightable-row").click(function () {
-            $(".highlightable-row").removeClass("table-active");
-            // Toggle the 'table-active' class on the clicked row
-            $(this).toggleClass("table-active");
-            // Hide all edit and delete buttons
-            $(".edit-btn, .delete-btn").hide();
-
-            // Show edit and delete buttons for the clicked row
-            $(this).find(".edit-btn, .delete-btn").show();
-        });
-        $(document).on("click", function (e) {
-            if (!$(e.target).closest(".highlightable-row").length) {
-                // Click occurred outside of the table rows
-                $(".highlightable-row").removeClass("table-active");
-                $(".edit-btn, .delete-btn").hide();
-            }
-        });
-    });
     function editCollege(button) {
         // Get the closest row to the clicked "Edit" button
         var row = $(button).closest('tr');
