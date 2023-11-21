@@ -75,3 +75,20 @@ def delete_student(recordId):
             return jsonify({'error': 'Failed to delete student'})
     except Exception as e:
         return jsonify({'error': 'Failed to delete student'})
+    
+@student_bp.route('/student/<string:student_id>', methods=['GET'])
+def view_student(student_id):
+    try:
+        # Fetch the details of the student based on the student ID
+        student_details = student_model.get_student_by_id(student_id)
+        if student_details:
+            # Render the student details page with the retrieved data
+            return render_template("student_details.html", student_details=student_details)
+        else:
+            flash('Student not found', 'error')
+            return redirect(url_for('student_bp.students'))
+
+    except Exception as e:
+        print(e)
+        flash('Failed to retrieve student details', 'error')
+        return redirect(url_for('student_bp.students'))
