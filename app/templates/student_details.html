@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block page %}Students{% endblock %}
+
+{% block content %}
+<!-- Display Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{% if 'success' in category %}success{% else %}danger{% endif %} alert-dismissible fade show m-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+{% endwith %}  
+
+<!-- Student Details  -->
+<div>
+  <nav class="navbar navbar-dark mt-3" style="background-color: #54595E; border-radius: 10px;">
+    <div class="container-fluid d-flex justify-content-start">
+      <button class="btn btn-outline-* text-light" onclick="goBack()" style="background-color: #54595E;" type="button">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <a class="navbar-brand">Student Details</a>
+    </div>
+  </nav>
+  <div class="mt-3" style="height: 75vh; max-height: 75vh; display: flex;">
+    <!-- Picture -->
+    <div style="flex: 0 0 25%; padding: 15px; box-sizing: border-box; border-right: 2px solid #ccc;">
+      <h3>Picture Here</h3>
+    </div>
+    <!-- Details -->
+    <div style="flex: 0 0 75%; padding: 15px; box-sizing: border-box; overflow-y: auto;">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>ID:</strong> {{ student_details[0] }}</li>
+        <li class="list-group-item"><strong>First Name:</strong> {{ student_details[1] }}</li>
+        <li class="list-group-item"><strong>Last Name:</strong> {{ student_details[2] }}</li>
+        <li class="list-group-item"><strong>Student Year:</strong> {{ student_details[3] }}</li>
+        <li class="list-group-item"><strong>Gender:</strong> {{ student_details[4] }}</li>
+        <li class="list-group-item"><strong>Course:</strong> {{ student_details[5] }}</li>
+        <li class="list-group-item"><strong>College:</strong> {{ student_details[6] }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Student Scripts  -->
+<script>
+  // JavaScript function to navigate back
+  function goBack() {
+        window.history.back();
+    }  
+</script>
+{% endblock %}
