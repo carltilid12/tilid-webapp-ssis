@@ -78,3 +78,27 @@ class student_model:
         data = cursor.fetchall()
         cursor.close()
         return data
+    
+    @classmethod
+    def get_student_by_id(cls, student_id):
+        connection = mysql.connection
+        cursor = connection.cursor()
+
+        try:
+            query = "SELECT student.id, student.firstname, student.lastname, \
+                        student.studentyear, student.gender,\
+                        CONCAT(course.coursename, ' (', course.coursecode , ')') AS coursename,\
+                        CONCAT(college.collegename, ' (', college.collegecode , ')') AS collegename\
+                        FROM student\
+                        JOIN course ON student.coursecode = course.coursecode\
+                        JOIN college on course.collegecode = college.collegecode WHERE id = %s"
+            cursor.execute(query, (student_id,))
+            student_data = cursor.fetchone()
+            if student_data:
+                return student_data
+            else:
+                return None
+        except Exception as e:
+            raise e
+        finally:
+            cursor.close()
