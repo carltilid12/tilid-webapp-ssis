@@ -26,17 +26,6 @@ $(document).ready(function() {
 
 // Table Highlight Script
 $(document).ready(function () {
-    // Add click event listener to highlight rows
-    $(".highlightable-row").click(function () {
-        $(".highlightable-row").removeClass("table-active");
-        // Toggle the 'table-active' class on the clicked row
-        $(this).toggleClass("table-active");
-        // Hide all edit and delete buttons
-        $(".edit-btn, .delete-btn").hide();
-
-        // Show edit and delete buttons for the clicked row
-        $(this).find(".edit-btn, .delete-btn").show();
-    });
     // Add hover event listener to highlight rows on hover
     $(".highlightable-row").hover(
         function () {
@@ -50,11 +39,4 @@ $(document).ready(function () {
             $(this).find(".edit-btn, .delete-btn").hide();
         }
     );
-  $(document).on("click", function (e) {
-      if (!$(e.target).closest(".highlightable-row").length) {
-          // Click occurred outside of the table rows
-          $(".highlightable-row").removeClass("table-active");
-          $(".edit-btn, .delete-btn").hide();
-      }
-  });
 });
