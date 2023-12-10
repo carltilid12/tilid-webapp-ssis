@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app.models.student_models import student_model
 from app.models.course_models import course_model
+import cloudinary
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
 student_bp = Blueprint('student_bp',__name__)
 
@@ -92,3 +95,27 @@ def view_student(student_id):
         print(e)
         flash('Failed to retrieve student details', 'error')
         return redirect(url_for('student_bp.students'))
+    
+@student_bp.route('/student/upload-image', methods=['POST'])
+def upload_image():
+    try:
+        # Assuming you have a form with an input field named 'file'
+        student_id = request.form['student_id']
+        cropped_image_data = request.form['croppedImageData']
+
+        # Check if a file was provided
+        if cropped_image_data:
+            # Upload the file to Cloudinary
+            upload_result = cloudinary.uploader.upload(cropped_image_data)
+            print(upload_result)
+            flash('Image uploaded successfully', 'success')
+            return redirect(url_for('student_bp.view_student', student_id=student_id))
+        else:
+            flash('No file provided', 'error')
+            return redirect(url_for('student_bp.view_student', student_id=student_id))
+
+    except Exception as e:
+        flash('Failed to upload image', 'error')
+        print(str(e))  # Log the exception for debugging
+
+    return redirect(url_for('student_bp.students'))
