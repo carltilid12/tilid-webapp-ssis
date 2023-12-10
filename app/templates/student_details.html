@@ -57,7 +57,8 @@
           </div>
           <div class="modal-body">
               <!-- Your image upload form goes here -->
-              <form action="/upload" method="POST" enctype="multipart/form-data">
+              <form action="/student/upload-image" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="student_id" id="student_id" value="{{ student_details[0] }}">
                   <!-- File Input -->
                   <div class="mb-3">
                       <label for="fileInput" class="form-label">Choose a file</label>
@@ -97,7 +98,7 @@
       var cropper = new Cropper(document.getElementById('imagePreview'), {
           aspectRatio: 1,  // Set the aspect ratio for a circular image
           viewMode: 1,     // Restrict the crop box to not exceed the size of the canvas
-          autoCropArea: 0.8,  // Initial size of the crop box
+          autoCropArea: 1,  // Initial size of the crop box
           crop: function (event) {
               // Update the hidden input with cropped image data (base64)
               var canvas = cropper.getCroppedCanvas();
