@@ -4,6 +4,7 @@ from app.models.course_models import course_model
 import cloudinary
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
+from urllib.parse import urlparse
 
 student_bp = Blueprint('student_bp',__name__)
 
@@ -106,8 +107,16 @@ def upload_image():
         # Check if a file was provided
         if cropped_image_data:
             # Upload the file to Cloudinary
+            oldimage = student_model.get_student_image_url(student_id)
+            if oldimage:
+                parsed_url = urlparse(oldimage)
+                public_id = parsed_url.path.split("/")[-1].split(".")[0]
+                cloudinary.uploader.destroy(public_id)
+                print(public_id)
+
             upload_result = cloudinary.uploader.upload(cropped_image_data)
-            print(upload_result)
+            image_url = upload_result['url']
+            student_model.associate_image_url(image_url, student_id)
             flash('Image uploaded successfully', 'success')
             return redirect(url_for('student_bp.view_student', student_id=student_id))
         else:
