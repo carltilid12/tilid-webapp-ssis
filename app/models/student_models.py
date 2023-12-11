@@ -88,7 +88,8 @@ class student_model:
             query = "SELECT student.id, student.firstname, student.lastname, \
                         student.studentyear, student.gender,\
                         CONCAT(course.coursename, ' (', course.coursecode , ')') AS coursename,\
-                        CONCAT(college.collegename, ' (', college.collegecode , ')') AS collegename\
+                        CONCAT(college.collegename, ' (', college.collegecode , ')') AS collegename,\
+                        profile_picture_url\
                         FROM student\
                         JOIN course ON student.coursecode = course.coursecode\
                         JOIN college on course.collegecode = college.collegecode WHERE id = %s"
@@ -102,3 +103,48 @@ class student_model:
             raise e
         finally:
             cursor.close()
+
+    @classmethod
+    def associate_image_url(cls, image_url, student_id):
+        connection = mysql.connection
+        cursor = connection.cursor()
+
+        try:
+            # Define the SQL query to update the student's profile_picture_url
+            update_query = "UPDATE student SET profile_picture_url = %s WHERE id = %s"
+            
+            # Execute the query with the image URL and student ID
+            cursor.execute(update_query, (image_url, student_id))
+            
+            connection.commit()
+
+        except Exception as e:
+            # Handle any errors that may occur during the update
+            connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+
+    @classmethod
+    def get_student_image_url(cls, student_id):
+        connection = mysql.connection
+        cursor = connection.cursor()
+
+        try:
+            # Get Student Image Url
+            query = "SELECT profile_picture_url FROM student WHERE id = %s"
+            cursor.execute(query, (student_id,))
+            result = cursor.fetchone()
+            connection.commit()
+
+            if result:
+                return result[0]
+            else:
+                return None
+
+        except Exception as e:
+            connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+
