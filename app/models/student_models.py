@@ -69,12 +69,13 @@ class student_model:
     def get_students(cls):
         connection = mysql.connection
         cursor = connection.cursor(dictionary=True)
-        cursor.execute('SELECT student.id, student.firstname, student.lastname, student.coursecode, \
+        cursor.execute('SELECT student.id, student.profile_picture_url ,student.firstname, student.lastname, student.coursecode, \
                         student.studentyear, student.gender, \
                         CONCAT(college.collegename, " (", college.collegecode , ")") AS collegename\
                         FROM student\
                         JOIN course ON student.coursecode = course.coursecode\
-                        JOIN college on course.collegecode = college.collegecode')
+                        JOIN college on course.collegecode = college.collegecode\
+                        ORDER BY student.id')
         data = cursor.fetchall()
         cursor.close()
         return data
