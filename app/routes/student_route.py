@@ -19,6 +19,8 @@ def students():
         coursecode = request.form.get('course')
         studentyear = request.form.get('year')
         gender = request.form.get('gender')
+        file = request.form.get('file')
+        cropped_image_data = request.form['croppedImageData']
         
         # Create a dictionary to hold the student data
         student_data = {
@@ -31,11 +33,43 @@ def students():
         }
         # Create the student by calling the model function
         try:
-            student_model.create_student(student_data)
+            if file and (not cropped_image_data):
+                flash('Invalid File Format', 'error')
+                return redirect(url_for('student_bp.students'))
+            elif not file:
+                student_model.create_student(student_data)
+                flash('Student created successfully', 'success')
+            
+            # Check if a file was provided
+            if cropped_image_data:
+                # Convert image data size from bytes to megabytes
+                image_size_mb = len(cropped_image_data) / (1024 * 1024)
+
+                # Check if the image size exceeds the limit
+                if image_size_mb > 5:
+                    flash(f'Image size exceeds the maximum limit of {5} MB', 'error')
+                    return redirect(url_for('student_bp.students'))
+                
+                student_model.create_student(student_data)
+
+                # Upload the file to Cloudinary
+                oldimage = student_model.get_student_image_url(id)
+                if oldimage:
+                    parsed_url = urlparse(oldimage)
+                    public_id = parsed_url.path.split("/")[-1].split(".")[0]
+                    cloudinary.uploader.destroy(public_id)
+                    print(public_id)
+
+                upload_result = cloudinary.uploader.upload(cropped_image_data)
+                image_url = upload_result['url']
+                student_model.associate_image_url(image_url, id)
+
+                flash('Student created successfully', 'success')
+
             error = None
-            flash('Student created successfully', 'success')
         except Exception as e:
             flash('Failed to create the student', 'error')
+            print(e)
             error = 'Failed to create the student'
             
         return redirect(url_for('student_bp.students'))
@@ -58,11 +92,44 @@ def update_student():
             'studentyear': request.form.get('edit-year'),
             'gender': request.form.get('edit-gender')
         }
+        id = request.form.get('edit-id')
+        file = request.form.get('edit-file')
+        cropped_image_data = request.form['croppedImageData']
 
         try:
-            # Call the update_student function to update the student in the database
-            student_model.update_student(student_data)
-            flash('Student updated successfully', 'success')
+            if file and (not cropped_image_data):
+                flash('Invalid File Format', 'error')
+                return redirect(url_for('student_bp.students'))
+            elif not file:
+                student_model.update_student(student_data)
+                flash('Student updated successfully', 'success')
+            # Check if a file was provided
+            elif cropped_image_data:
+                
+                # Convert image data size from bytes to megabytes
+                image_size_mb = len(cropped_image_data) / (1024 * 1024)
+
+                # Check if the image size exceeds the limit
+                if image_size_mb > 5:
+                    flash(f'Image size exceeds the maximum limit of {5} MB', 'error')
+                    return redirect(url_for('student_bp.students'))
+                
+                student_model.update_student(student_data)
+                
+                # Upload the file to Cloudinary
+                oldimage = student_model.get_student_image_url(id)
+                if oldimage:
+                    parsed_url = urlparse(oldimage)
+                    public_id = parsed_url.path.split("/")[-1].split(".")[0]
+                    cloudinary.uploader.destroy(public_id)
+                    print(public_id)
+
+                upload_result = cloudinary.uploader.upload(cropped_image_data)
+                image_url = upload_result['url']
+                student_model.associate_image_url(image_url, id)
+
+                flash('Student updated successfully', 'success')
+
         except Exception as e:
             flash('Failed to update the student', 'error')
 
@@ -73,6 +140,13 @@ def update_student():
 def delete_student(recordId):
     try:
         # Call the delete_student function from student_models.py
+        oldimage = student_model.get_student_image_url(recordId)
+        if oldimage:
+            parsed_url = urlparse(oldimage)
+            public_id = parsed_url.path.split("/")[-1].split(".")[0]
+            cloudinary.uploader.destroy(public_id)
+            print(public_id)
+
         success = student_model.delete_student(recordId)
         if success:
             return jsonify({'message': 'Student deleted successfully'})
